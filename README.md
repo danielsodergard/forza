@@ -13,7 +13,7 @@
 - Approval
 - SMS
 - AdminUser
-- email summary
+- Email summary
 
 
 ## UI
