@@ -5,11 +5,12 @@
 ## Key requirements: time tracking without anything special
 
 ## Models
-- Post date:date reason:text
-- User -> DEvise
-- AdminUser -> STI
+- x Post date:date reason:text
+- x User -> DEvise
+- x AdminUser -> STI
 
 ## Features
+- x Users
 - Approval
 - SMS
 - AdminUser
