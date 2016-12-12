@@ -19,3 +19,6 @@
 
 ## UI
 - Bootstrap und so weiter
+
+## Refactor TODO
+- Add full name
