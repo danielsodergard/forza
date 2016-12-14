@@ -2,23 +2,29 @@ require 'rails_helper'
 
 describe 'navigate' do
   before do
-    user = User.create(email: "test@test.com", password: "secret", password_confirmation: "secret", first_name: "Medel", last_name: "Svensson")
-    login_as(user, :scope => :user)
-    post1 = Post.create(date: Date.today, rationale: "post1", user_id: user.id)
-    post2 = Post.create(date: Date.today, rationale: "post2", user_id: user.id)
+    @user = FactoryGirl.create(:user)
+    login_as(@user, :scope => :user)
+
   end
+  
   describe 'index' do
-    it 'can be reached succesfully' do
+    before do
       visit posts_path
+    end
+
+    it 'can be reached succesfully' do
       expect(page.status_code).to eq(200)
     end
     it 'has a title of Posts' do
-      visit posts_path
       expect(page).to have_content(/Posts/)
     end
     it 'has a list of posts' do
+      #post1 = FactoryGirl.build_stubbed(:post)   FUCK THIS SHIT!
+      #post2 = FactoryGirl.build_stubbed(:second_post)      AND THIS!
+      post3 = Post.create(date: Date.today, rationale: "FucktoryGirl", user_id: @user.id)
+      post3 = Post.create(date: Date.yesterday, rationale: "Sucks", user_id: @user.id)
       visit posts_path
-      expect(page).to have_content(/post1|post2/)
+      expect(page).to have_content(/Fucktory|Sucks/)
     end
   end
   
@@ -45,4 +51,24 @@ describe 'navigate' do
       expect(User.last.posts.last.rationale).to eq("User_Association")
     end
   end
+  
+  describe 'edit' do
+    before do
+      @post = Post.create(date: Date.yesterday, rationale: "Sucks", user_id: @user.id)
+    end
+    
+    it 'can be reached by clickin edit on index page' do
+      visit posts_path
+      click_link("edit_#{@post.id}")
+      expect(page.status_code).to eq(200)
+    end
+    it 'can be edited' do
+      visit edit_post_path(@post)
+      fill_in 'post[date]', with: Date.today
+      fill_in 'post[rationale]', with: "edited content"
+      click_on "Save"
+      expect(page).to have_content("edited content")
+    end
+  end
+  
 end
